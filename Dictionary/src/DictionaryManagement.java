@@ -6,12 +6,12 @@ public class DictionaryManagement {
     void insertFromCommandLine() {
         Scanner scannerInt = new Scanner(System.in);
 
-        //System.out.println("Nhap so tu can them:");
+        System.out.println("Nhap so tu can them:");
 
         int numOfWords = scannerInt.nextInt();
         dictionary.setCurrentSize(numOfWords);
 
-        //System.out.println("Nhap tu va nghia cua chung:");
+        System.out.println("Nhap tu va nghia cua chung:");
 
         Scanner scannerString = new Scanner(System.in);
 
