@@ -1,3 +1,6 @@
+import java.util.Objects;
+import java.util.Scanner;
+
 public class DictionaryCommandLine {
     private DictionaryManagement dictionaryManagement = new DictionaryManagement();
 
@@ -17,8 +20,28 @@ public class DictionaryCommandLine {
         showAllWords();
     }
 
-    public static void main(String args[]) {
+    public void dictionaryAdvanced() {
+        dictionaryManagement.insertFromFile();
+        showAllWords();
+
+        System.out.println("You can search for a word in this dictionary.");
+        System.out.println("Type '-1'  to end the program.");
+
+        Scanner scanner = new Scanner(System.in);
+
+        while(true) {
+            String lookup = scanner.nextLine();
+
+            if(Objects.equals(lookup, "-1")) {
+                break;
+            } else {
+                dictionaryManagement.dictionaryLookup(lookup);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
         DictionaryCommandLine command = new DictionaryCommandLine();
-        command.dictionaryBasic();
+        command.dictionaryAdvanced();
     }
 }
