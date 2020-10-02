@@ -27,4 +27,8 @@ public class Word {
     public String getWordExplain() {
         return wordExplain;
     }
+
+    public void setWordExplain(String wordExplain) {
+        this.wordExplain = wordExplain;
+    }
 }
