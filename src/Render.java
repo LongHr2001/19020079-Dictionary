@@ -11,8 +11,8 @@ import java.awt.event.ActionListener;
 public class Render extends JFrame {
     private final String FRAME_TITLE = "19020079 - Dictionary";
 
-    private final int FRAME_WIDTH = 810;
-    private final int FRAME_HEIGHT = 540;
+    private final int FRAME_WIDTH = 1080;
+    private final int FRAME_HEIGHT = 640;
 
     private JPanel panel;
 
@@ -22,12 +22,13 @@ public class Render extends JFrame {
     private final int SEARCH_HEIGHT = 20;
 
     private JTextArea meaningWord;
-    private final int MEANINGWORD_WIDTH = 325;
+    private final int MEANINGWORD_WIDTH = 595;
     private final int MEANINGWORD_HEIGHT = 45;
 
     private JTextArea meaning;
-    private final int MEANING_WIDTH = 385;
+    private final int MEANING_WIDTH = 655;
     private final int MEANING_HEIGHT = 475;
+    private JScrollPane meaningScroll;
 
     private JTextArea searchField;
     private final int SEARCHFIELD_WIDTH = 315;
@@ -36,6 +37,7 @@ public class Render extends JFrame {
     private JList dictionaryEntries;
     private final int ENTRIES_WIDTH = 385;
     private final int ENTRIES_HEIGHT = 490;
+    private JScrollPane listScroll;
 
     private static JMenuBar menu;
 
@@ -122,11 +124,13 @@ public class Render extends JFrame {
                 setMeaningSection(dictionaryEntries.getSelectedIndex());
             }
         });
+
+        listScroll = new JScrollPane(dictionaryEntries);
     }
 
     private void prepareMeaningWord() {
         meaningWord = new JTextArea();
-        meaningWord.setFont(new Font("helveticaneuebold", Font.PLAIN, 30));
+        meaningWord.setFont(new Font("helveticaneuebold", Font.PLAIN, 25));
         meaningWord.setForeground(Color.RED);
         meaningWord.setEditable(false);
     }
@@ -135,6 +139,9 @@ public class Render extends JFrame {
         meaning = new JTextArea();
         meaning.setFont(new Font("helveticaneue", Font.PLAIN, 15));
         meaning.setEditable(false);
+
+        meaningScroll = new JScrollPane(meaning);
+        meaningScroll.setBorder(BorderFactory.createEmptyBorder());
     }
 
     private void createLayout() {
@@ -149,13 +156,13 @@ public class Render extends JFrame {
                                 .addComponent(search, SEARCH_WIDTH, SEARCH_WIDTH, SEARCH_WIDTH)
                                 .addComponent(searchField, SEARCHFIELD_WIDTH, SEARCHFIELD_WIDTH, SEARCHFIELD_WIDTH)
                         )
-                        .addComponent(dictionaryEntries, ENTRIES_WIDTH, ENTRIES_WIDTH, ENTRIES_WIDTH)
+                        .addComponent(listScroll, ENTRIES_WIDTH, ENTRIES_WIDTH, ENTRIES_WIDTH)
                 ).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 10, 10)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addComponent(meaningWord, MEANINGWORD_WIDTH, MEANINGWORD_WIDTH, MEANINGWORD_WIDTH)
                                 .addComponent(speak))
-                        .addComponent(meaning, MEANING_WIDTH, MEANING_WIDTH, MEANING_WIDTH)
+                        .addComponent(meaningScroll, MEANING_WIDTH, MEANING_WIDTH, MEANING_WIDTH)
                 )
         );
 
@@ -167,8 +174,8 @@ public class Render extends JFrame {
                         .addComponent(speak)
                 )
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addComponent(dictionaryEntries, ENTRIES_HEIGHT, ENTRIES_HEIGHT, ENTRIES_HEIGHT)
-                        .addComponent(meaning, MEANING_HEIGHT, MEANING_HEIGHT, MEANING_HEIGHT)
+                        .addComponent(listScroll, ENTRIES_HEIGHT, ENTRIES_HEIGHT, ENTRIES_HEIGHT)
+                        .addComponent(meaningScroll, MEANING_HEIGHT, MEANING_HEIGHT, MEANING_HEIGHT)
                 )
         );
     }
@@ -223,15 +230,13 @@ public class Render extends JFrame {
         panel.add(searchField);
 
         prepareDictionaryEntries();
-        panel.add(dictionaryEntries);
-        JScrollPane listScroll = new JScrollPane(dictionaryEntries);
         panel.add(listScroll);
 
         prepareMeaningWord();
         panel.add(meaningWord);
 
         prepareMeaning();
-        panel.add(meaning);
+        panel.add(meaningScroll);
 
         createSpeaker();
         panel.add(speak);
@@ -252,7 +257,7 @@ public class Render extends JFrame {
             String wordExplain = currentListModel.getElementAt(index).getWordExplain();
 
             meaningWord.setText(" " + wordEnglish);
-            meaning.setText("  " + wordExplain);
+            meaning.setText(wordExplain);
         } else {
             meaningWord.setText("");
             meaning.setText("");

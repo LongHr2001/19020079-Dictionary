@@ -36,24 +36,47 @@ public class DictionaryManagement {
     public void insertFromFile() {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    new FileInputStream("dictionary.txt"), StandardCharsets.UTF_16));
+                    new FileInputStream("dictionary.txt"), StandardCharsets.UTF_8));
+
+            boolean firstWord = true;
+            String word = "";
+            String meaning = "";
 
             while(reader.ready()) {
-                String wordAndMeaning = reader.readLine();
+                String line = reader.readLine();
+                int length = line.length();
+                //System.out.println(line);
 
-                int length = wordAndMeaning.length();
+                if (!Objects.equals(line, "")) {
+                    if (line.charAt(0) == '@') {
+                        if (!firstWord) {
+                            Word temp = new Word(word, meaning);
+                            dictionary.addWord(temp);
+                            meaning = "";
 
-                for(int i = 0; i < length; i++) {
-                    if (wordAndMeaning.charAt(i) == '\t') {
-                        String wordTarget = wordAndMeaning.substring(0, i);
-                        String wordExplain = wordAndMeaning.substring(i + 1, length);
+                        } else {
+                            firstWord = false;
+                        }
 
-                        Word wordTemp =  new Word(wordTarget, wordExplain);
-                        dictionary.addWord(wordTemp);
-                        break;
+                        boolean separated = false;
+
+                        for (int i = 0; i < length; i++) {
+                            if (line.charAt(i) == '/' || line.charAt(i) == '=') {
+                                word = line.substring(1, i);
+                                separated = true;
+                                break;
+                            }
+                        }
+
+                        if (!separated) {
+                            word = line.substring(1, length);
+                        }
+
+                    } else {
+                        meaning += " " + line.substring(1, length);
+                        meaning += System.lineSeparator();
                     }
                 }
-
             }
 
             reader.close();
@@ -143,13 +166,14 @@ public class DictionaryManagement {
     }
 
     public DefaultListModel<Word> dictionarySearcher(String search) {
+        search = search.toLowerCase();
         int dictSize = dictionary.getCurrentSize();
         int searchStringLength = search.length();
 
         DefaultListModel<Word> resultList = new DefaultListModel();
 
         for (int i = 0; i < dictSize; i++) {
-            String word = dictionary.getDictAtElement(i).getWordTarget();
+            String word = dictionary.getDictAtElement(i).getWordTarget().toLowerCase();
             if(word.length() >= searchStringLength) {
                 String wordSubString = word.substring(0, searchStringLength);
 
