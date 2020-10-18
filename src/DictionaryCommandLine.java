@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -18,37 +19,6 @@ public class DictionaryCommandLine {
     public void dictionaryBasic() {
         dictionaryManagement.insertFromCommandLine();
         showAllWords();
-    }
-
-    public void dictionarySearcher(String search) {
-        int dictSize = dictionaryManagement.dictionary.getCurrentSize();
-
-        int searchStringLength = search.length();
-
-        Vector<Integer> indexList = new Vector<Integer>();
-
-        for (int i = 0; i < dictSize; i++) {
-            String word = dictionaryManagement.dictionary.getDictAtElement(i).getWordTarget();
-            String wordSubString = word.substring(0, searchStringLength);
-
-            if (wordSubString.equals(search)) {
-                indexList.add(i);
-            }
-        }
-
-        if (indexList.isEmpty()) {
-            System.out.println("Can't find any matching words");
-        } else {
-            System.out.println("No      |English        |Vietnamese");
-
-            int listSize = indexList.size();
-
-            for (int i = 0; i < listSize; i++) {
-                System.out.println((indexList.get(i) + 1) + "        |"
-                        +dictionaryManagement.dictionary.getDictAtElement(indexList.get(i)).getWordTarget()  + "        |"
-                        + dictionaryManagement.dictionary.getDictAtElement(indexList.get(i)).getWordExplain());
-            }
-        }
     }
 
     public void helpCommand() {
@@ -125,20 +95,9 @@ public class DictionaryCommandLine {
                     }
                     break;
 
-                case "-search":
-                    System.out.println("Type part of the word you need to search for: ");
-                    String search = scanner.nextLine();
-                    dictionarySearcher(search);
-                    break;
-
                 case "-print":
                     dictionaryManagement.dictionaryExportToFile();
             }
         }
     }
-
-    /*public static void main(String[] args) {
-        DictionaryCommandLine command = new DictionaryCommandLine();
-        command.dictionaryAdvanced();
-    }*/
 }

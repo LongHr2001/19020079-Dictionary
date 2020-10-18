@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.*;
 
 import java.nio.charset.StandardCharsets;
@@ -62,20 +63,16 @@ public class DictionaryManagement {
         }
     }
 
-    public void dictionaryLookup(String word) {
+    public int dictionaryLookup(String word) {
         int dictLength = dictionary.getCurrentSize();
-
-        boolean found = false;
 
         for (int i = 0; i < dictLength; i++) {
             if(Objects.equals(word, dictionary.getDictAtElement(i).getWordTarget())) {
-                System.out.println(dictionary.getDictAtElement(i).getWordExplain());
-                found = true;
+                return i;
             }
         }
-        if(!found) {
-            System.out.println("This word doesn't exist in this dictionary.");
-        }
+
+        return -1;
     }
 
     public boolean existedInDictionary(String word) {
@@ -90,18 +87,6 @@ public class DictionaryManagement {
         return false;
     }
 
-    public int IDInDictionary(String word) {
-        int dictLength = dictionary.getCurrentSize();
-
-        for (int i = 0; i < dictLength; i++) {
-            if(Objects.equals(word, dictionary.getDictAtElement(i).getWordTarget())) {
-                return i;
-            }
-        }
-
-        return -1;
-    }
-
     public void addToDictionary(String wordTarget, String wordExplain) {
         if(existedInDictionary(wordTarget)) {
             System.out.println("Word already existed in Dictionary");
@@ -112,13 +97,7 @@ public class DictionaryManagement {
     }
 
     public void deleteWord(String word) {
-        boolean deleted = dictionary.deleteWord(word);
-
-        if(deleted) {
-            System.out.println("Word deleted!");
-        } else {
-            System.out.println("Word not existed in Dictionary");
-        }
+        dictionary.deleteWord(word);
     }
 
     public void editWord(int entry, String wordTarget, String wordExplain) {
@@ -163,5 +142,23 @@ public class DictionaryManagement {
         }
     }
 
+    public DefaultListModel<Word> dictionarySearcher(String search) {
+        int dictSize = dictionary.getCurrentSize();
+        int searchStringLength = search.length();
 
+        DefaultListModel<Word> resultList = new DefaultListModel();
+
+        for (int i = 0; i < dictSize; i++) {
+            String word = dictionary.getDictAtElement(i).getWordTarget();
+            if(word.length() >= searchStringLength) {
+                String wordSubString = word.substring(0, searchStringLength);
+
+                if (wordSubString.equals(search)) {
+                    resultList.addElement(dictionary.getDictAtElement(i));
+                }
+            }
+        }
+
+        return resultList;
+    }
 }
