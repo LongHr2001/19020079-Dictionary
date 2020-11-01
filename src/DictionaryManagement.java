@@ -119,6 +119,14 @@ public class DictionaryManagement {
         }
     }
 
+    public void addToDictionary(Word word) {
+        if(existedInDictionary(word.getWordTarget())) {
+            System.out.println("Word already existed in Dictionary");
+        } else {
+            dictionary.addWord(word);
+        }
+    }
+
     public void deleteWord(String word) {
         dictionary.deleteWord(word);
     }
